@@ -15,7 +15,7 @@ void loop()
     delay(1000/sqrt(i));
     digitalWrite(led,LOW);
     delay(1000/sqrt(i));
-    if (analogRead(3)*5./1023>=4) // Si je touche le fil car je ne distingue plus le clignotement
+    if (analogRead(3)*5./1023>=4) // Si l'utilisateur appuie sur le bouton car il ne distingue plus le clignotement
     {
       Serial.println(1000/(1000/sqrt(i))); // Alors Arduino renvoie à l’écran le nombre de clignotements par seconde à cet instant
     }
