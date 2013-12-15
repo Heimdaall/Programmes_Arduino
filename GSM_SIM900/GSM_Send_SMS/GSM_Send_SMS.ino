@@ -33,7 +33,6 @@ void setup()
     Serial.println("Mode SMS en cours d'activation ...");
     // Activation du mode texte pour les SMS.
     sendATcommand("AT+CMGF=1", "OK", 1000);
-    sendATcommand("AT+CSMP=17,167,0,240", "OK", 1000); // Flaash SMS
     Serial.println("Envoi du SMS en cours ...");
     
     sprintf(aux_string,"AT+CMGS=\"%s\"", phone_number);
