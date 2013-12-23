@@ -10,7 +10,7 @@ void setup(){
     Serial2.begin(115200);  
 
     Serial.println("------------------------------------------------------");
-    Serial.println("----Upsilon Audio - Envoyer un SMS avec le SIM900-----");
+    Serial.println("---Upsilon Audio - Recevoir un SMS avec le SIM900-----");
     Serial.println("------------------------------------------------------");
     Serial.println("");
     Serial.println("Initialisation en cours ...");
