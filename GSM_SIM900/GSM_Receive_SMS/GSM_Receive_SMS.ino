@@ -1,3 +1,8 @@
+//SIM900 - Recevoir des SMS
+//Par Pierre Pelé
+//http://upsilonaudio.com/
+//Décembre 2013
+
 int8_t answer;
 int x;
 int onModulePin= 2; // Il s'agit du port DTR (ou PWR) du module SIM900.

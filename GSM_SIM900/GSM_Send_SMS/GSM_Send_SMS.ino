@@ -1,3 +1,8 @@
+//SIM900 - Envoyer des SMS
+//Par Pierre Pelé
+//http://upsilonaudio.com/
+//Décembre 2013
+
 int8_t answer;
 int onModulePin= 2; // Il s'agit du port DTR (ou PWR) du module SIM900.
 char aux_string[30];
