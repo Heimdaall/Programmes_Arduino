@@ -1,11 +1,19 @@
-
-int8_t answer;
+/*
+ *  Description: This example shows how to upload and download files from a FTP 
+ *  server. The example configures the module to use FTP funtions, uploads a file 
+ *  to the FTP server and then downloads the content of the uploaded file and shows
+ *  it. This example only shows the AT commands (and the answers of the module) 
+ *  used to use the FTP funtion and how work the FTP functions. For more 
+ *  information about the AT commands, refer to the AT command manual.
+ */
+ 
+ int8_t answer;
 int onModulePin = 2;
 char aux_str[30];
 
-char incoming_data[112];
+char incoming_data[120];
 
-char test_str[ ]= "La transmission des donnees vers le FTP via le GSM fonctionne.";
+char test_str[ ]= "0000000011111111222222223333333344444444555555556666666677777777000000001111111122222222333333334444";
 
 int data_size, aux;
 
@@ -16,12 +24,12 @@ void setup(){
     Serial.begin(115200);  
 
 
-    Serial.println("Initialisation ...");
+    Serial.println("Starting...");
     power_on();
 
     delay(5000);
 
-    Serial.println("Connexion au serveur en cours ...");
+    Serial.println("Connecting to the network...");
 
     while( (sendATcommand("AT+CREG?", "+CREG: 0,1", 500) 
             || sendATcommand("AT+CREG?", "+CREG: 0,5", 500)) == 0 );
@@ -29,6 +37,8 @@ void setup(){
     configure_FTP();
 
     uploadFTP();
+
+    downloadFTP();
 
     Serial.print("Incoming data: ");
     Serial.println(incoming_data);
@@ -44,23 +54,23 @@ void configure_FTP(){
 
     sendATcommand("AT+SAPBR=3,1,\"Contype\",\"GPRS\"", "OK", 2000);
     sendATcommand("AT+SAPBR=3,1,\"APN\",\"APN\"", "OK", 2000);
-    sendATcommand("AT+SAPBR=3,1,\"USER\",\"upsilona\"", "OK", 2000);
-    sendATcommand("AT+SAPBR=3,1,\"PWD\",\"Amphet@minique2013\"", "OK", 2000);
+    sendATcommand("AT+SAPBR=3,1,\"USER\",\"user_name\"", "OK", 2000);
+    sendATcommand("AT+SAPBR=3,1,\"PWD\",\"password\"", "OK", 2000);
 
     while (sendATcommand("AT+SAPBR=1,1", "OK", 20000) != 1);
     sendATcommand("AT+FTPCID=1", "OK", 2000);
-    sendATcommand("AT+FTPSERV=\"ftp.upsilonaudio.com\"", "OK", 2000);
+    sendATcommand("AT+FTPSERV=\"ftp.yourserver.com\"", "OK", 2000);
     sendATcommand("AT+FTPPORT=21", "OK", 2000);
-    sendATcommand("AT+FTPUN=\"upsilona\"", "OK", 2000);
-    sendATcommand("AT+FTPPW=\"Amphet@minique2013\"", "OK", 2000);
+    sendATcommand("AT+FTPUN=\"user_name\"", "OK", 2000);
+    sendATcommand("AT+FTPPW=\"password\"", "OK", 2000);
 
 }
 
 
 void uploadFTP(){
 
-    sendATcommand("AT+FTPPUTNAME=\"GSM_TEST_ARDUINO\"", "OK", 2000);
-    sendATcommand("AT+FTPPUTPATH=\"/ICARE/\"", "OK", 2000);
+    sendATcommand("AT+FTPPUTNAME=\"file_name\"", "OK", 2000);
+    sendATcommand("AT+FTPPUTPATH=\"/path\"", "OK", 2000);
     if (sendATcommand("AT+FTPPUT=1", "+FTPPUT:1,1,", 30000) == 1)
     {
         data_size = 0;
@@ -78,8 +88,8 @@ void uploadFTP(){
         {
             if (sendATcommand("AT+FTPPUT=2,100", "+FTPPUT:2,100", 30000) == 1)
             {
-                Serial.println(sendATcommand(test_str, "+FTPPUT:1,1", 30000));          
-                Serial.println(sendATcommand("AT+FTPPUT=2,0", "+FTPPUT:1,0", 30000));
+                Serial.println(sendATcommand(test_str, "+FTPPUT:1,1", 30000), DEC);          
+                Serial.println(sendATcommand("AT+FTPPUT=2,0", "+FTPPUT:1,0", 30000), DEC);
                 Serial.println("Upload done!!");
             }
             else 
@@ -94,7 +104,7 @@ void uploadFTP(){
     }
     else
     {
-        Serial.println("Erreur. Ouverture de la sessions FTP impossible.");
+        Serial.println("Error openning the FTP session");
     }
 }
 
@@ -257,5 +267,3 @@ int8_t sendATcommand2(char* ATcommand, char* expected_answer1,
 
         return answer;
 }
-
-

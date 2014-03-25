@@ -21,4 +21,3 @@ void loop()
     delayMicroseconds(50); //Pause de 50 microsecondes
   }
 }
-
