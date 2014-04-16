@@ -1,5 +1,5 @@
 /*
- *  Description: This example shows how to configure the GPRS module in single 
+ *  Description: This example shows how to configure the GPRS module in multi 
  *  client mode and open a TCP socket as client. This example only shows the 
  *  AT commands (and the answers of the module) used to open a TCP/UDP 
  *  connection. For more information about the AT commands, refer to 
@@ -24,6 +24,7 @@
  *  Version 0.2
  *  Author: Alejandro Gallego 
  */
+ 
  
 int8_t answer;
 int onModulePin= 2;
@@ -50,16 +51,16 @@ void setup(){
     
     Serial.println("Connecting to the network...");
 
-    while( sendATcommand2("AT+CREG?", "+CREG: 0,1", "+CREG: 0,5", 1000)== 0 );
+    while( sendATcommand2("AT+CREG?", "+CREG: 0,1", "+CREG: 0,5", 1000) == 0 );
 
 }
 
 
 void loop(){
     
- 
-    // Selects Single-connection mode
-    if (sendATcommand2("AT+CIPMUX=0", "OK", "ERROR", 1000) == 1)
+    
+    // Selects Multi-connection mode
+    if (sendATcommand2("AT+CIPMUX=1", "OK", "ERROR", 1000) == 1)
     {
         // Waits for status IP INITIAL
         while(sendATcommand2("AT+CIPSTATUS", "INITIAL", "", 500)  == 0 );
@@ -67,7 +68,7 @@ void loop(){
         
         // Sets the APN, user name and password
         if (sendATcommand2("AT+CSTT=\"APN\",\"user_name\",\"password\"", "OK",  "ERROR", 30000) == 1)
-        {            
+        {
             // Waits for status IP START
             while(sendATcommand2("AT+CIPSTATUS", "START", "", 500)  == 0 );
             delay(5000);
@@ -87,26 +88,28 @@ void loop(){
                     delay(5000);
                     Serial.println("Openning TCP");
                     
-                    // Opens a TCP socket
-                    if (sendATcommand2("AT+CIPSTART=\"TCP\",\"IP_address\",\"port\"", 
-                            "CONNECT OK", "CONNECT FAIL", 30000) == 1)
+                    // Opens a TCP socket with connection 1
+                    if (sendATcommand2("AT+CIPSTART=1,\"TCP\",\"IP_address\",\"port\"",
+                                    "CONNECT OK", "CONNECT FAIL", 30000) == 1)
                     {
                         Serial.println("Connected");
                         
                         // Sends some data to the TCP socket
-                        sprintf(aux_str,"AT+CIPSEND=%d", strlen(ip_data));
+                        sprintf(aux_str,"AT+CIPSEND=1,%d", strlen(ip_data));
                         if (sendATcommand2(aux_str, ">", "ERROR", 10000) == 1)    
                         {
+                            delay(500);
                             sendATcommand2(ip_data, "SEND OK", "ERROR", 10000);
                         }
                         
                         // Closes the socket
-                        sendATcommand2("AT+CIPCLOSE", "CLOSE OK", "ERROR", 10000);
+                        sendATcommand2("AT+CIPCLOSE=1", "CLOSE OK", "ERROR", 10000);
                     }
                     else
                     {
-                        Serial.println("Error openning the connection");
+                        Serial.println("Error openning the connection 1");
                     }  
+                    
                 }
                 else
                 {
@@ -125,7 +128,7 @@ void loop(){
     }
     else
     {
-        Serial.println("Error setting the single connection");
+        Serial.println("Error setting the multi-connection");
     }
     
     sendATcommand2("AT+CIPSHUT", "OK", "ERROR", 10000);
