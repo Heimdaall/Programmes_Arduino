@@ -3,6 +3,8 @@
 //http://upsilonaudio.com/
 //Avril 2014
 
+//#define DEBUG // Décommentez pour debugger !
+
 void setup()
 {
   if(connexion_Reseau(15000))
@@ -30,7 +32,8 @@ uint8_t connexion_Reseau(unsigned int timeout)
   
   while((answer == 0) && ((millis() - previous) < timeout))
   {
-    if((envoyer_Commande_AT("AT+CREG?", "+CREG: 0,1", 500) || envoyer_Commande_AT("AT+CREG?", "+CREG: 0,5", 500)) == 1 )
+    if((envoyer_Commande_AT("AT+CREG?", "+CREG: 0,1", 500) 
+    || envoyer_Commande_AT("AT+CREG?", "+CREG: 0,5", 500)) == 1 )
     {
       answer=1;
     }
