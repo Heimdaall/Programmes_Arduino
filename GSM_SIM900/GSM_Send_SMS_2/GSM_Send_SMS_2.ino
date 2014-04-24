@@ -3,6 +3,9 @@
 //http://upsilonaudio.com/
 //Avril 2014
 
+// Arduino UNO : Taille binaire : 11 360 octets (d’un max de 32 256 octets)
+// Arduino MEGA : Taille binaire : 13 074 octets (d’un max de 258 048 octets)
+
 #include "SIM900.h"
 #include <SoftwareSerial.h>
 #include "sms.h"
