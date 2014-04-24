@@ -14,11 +14,11 @@ void setup()
   Serial.println("Mise en route");
   if (gsm.begin(9600))
   {
-    Serial.println("\nStatus=PRET");
+    Serial.println("\nStatus : PRET");
   }
   else
   {
-    Serial.println("\nStatus=VEILLE");
+    Serial.println("\nStatus : VEILLE");
   }
   int reg;
   reg=gsm.CheckRegistration();
